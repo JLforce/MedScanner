@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "es2020",
+    "jsx": "react-native",
+    "lib": ["es2020"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@screens": ["src/screens"],
+      "@components": ["src/components"],
+      "@services": ["src/services"],
+      "@db": ["src/db"],
+      "@utils": ["src/utils"],
+      "@constants": ["src/constants"],
+      "@hooks": ["src/hooks"],
+      "@types": ["src/types"]
+    }
+  }
+}
