@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
-import { ScannerScreen } from './src/screens/ScannerScreen';
+import { LandingScreen, ReviewScreen, ScannerScreen } from './src/screens';
 import { TextDetectionResult, ParsedMedication } from './src/types';
 import { COLORS, FONTS } from './src/constants';
 
 function AppContent() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [screen, setScreen] = useState<'landing' | 'scanner' | 'review'>('landing');
+  const [latestParsedMedication, setLatestParsedMedication] = useState<ParsedMedication | null>(null);
 
   useEffect(() => {
     initializeApp();
@@ -37,7 +39,8 @@ function AppContent() {
       requiresManualReview: parsed.requiresManualReview,
       reviewReason: parsed.reviewReason,
     });
-    // TODO: Route to review/analysis screen or save to DB
+    setLatestParsedMedication(parsed);
+    setScreen('review');
   };
 
   const handleScannerError = (error: Error) => {
@@ -64,6 +67,22 @@ function AppContent() {
         </View>
       </SafeAreaView>
     );
+  }
+
+  if (screen === 'review' && latestParsedMedication) {
+    return (
+      <ReviewScreen
+        medication={latestParsedMedication}
+        onScanAnother={() => {
+          setLatestParsedMedication(null);
+          setScreen('scanner');
+        }}
+      />
+    );
+  }
+
+  if (screen === 'landing') {
+    return <LandingScreen onStartScanning={() => setScreen('scanner')} />;
   }
 
   return (

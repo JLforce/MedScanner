@@ -94,64 +94,57 @@ export const CameraPermissionFlow: React.FC<CameraPermissionFlowProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Retro Icon */}
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>📷</Text>
-        </View>
+        <View style={styles.card}>
+          <Text style={styles.kicker}>PERMISSION SETUP</Text>
 
-        {/* Title */}
-        <Text style={styles.title}>Camera Access Required</Text>
+          <Text style={styles.title}>Camera Access Required</Text>
 
-        {/* Description */}
-        <Text style={styles.description}>
-          MedScanner needs access to your camera to scan medication labels and check for dangerous drug interactions.
-        </Text>
-
-        {/* Permission Status */}
-        <View style={styles.statusBox}>
-          <Text style={styles.statusLabel}>Status:</Text>
-          <Text
-            style={[
-              styles.statusValue,
-              {
-                color:
-                  permissionStatus === RESULTS.BLOCKED
-                    ? COLORS.RED
-                    : COLORS.ALERT_ORANGE,
-              },
-            ]}
-          >
-            {permissionStatus === RESULTS.BLOCKED
-              ? 'PERMISSION BLOCKED'
-              : 'PERMISSION DENIED'}
+          <Text style={styles.description}>
+            MedScanner uses the camera to read medication labels and generate structured safety information.
           </Text>
-        </View>
 
-        {/* Warning Message */}
-        <View style={styles.warningBox}>
-          <Text style={styles.warningTitle}>⚠️ Important:</Text>
-          <Text style={styles.warningText}>
-            Without camera access, MedScanner cannot scan medications. This feature is critical for your safety.
-          </Text>
-        </View>
-
-        {/* Action Button */}
-        <TouchableOpacity
-          onPress={requestCameraPermission}
-          style={styles.button}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.buttonText}>ENABLE CAMERA ACCESS</Text>
-        </TouchableOpacity>
-
-        {/* Manual Settings Instruction */}
-        {permissionStatus === RESULTS.BLOCKED && (
-          <View style={styles.settingsNote}>
-            <Text style={styles.settingsNoteText}>
-              If you continue to see this message, manually enable Camera in Settings → Apps → MedScanner → Permissions.
+          <View style={styles.statusBox}>
+            <Text style={styles.statusLabel}>Current status</Text>
+            <Text
+              style={[
+                styles.statusValue,
+                {
+                  color:
+                    permissionStatus === RESULTS.BLOCKED
+                      ? COLORS.RED
+                      : COLORS.ALERT_ORANGE,
+                },
+              ]}
+            >
+              {permissionStatus === RESULTS.BLOCKED
+                ? 'Permission Blocked'
+                : 'Permission Denied'}
             </Text>
           </View>
-        )}
+
+          <View style={styles.warningBox}>
+            <Text style={styles.warningTitle}>Important</Text>
+            <Text style={styles.warningText}>
+              Camera access is required for scanning. Without this permission, scanning and result parsing cannot continue.
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={requestCameraPermission}
+            style={styles.button}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>Grant Camera Access</Text>
+          </TouchableOpacity>
+
+          {permissionStatus === RESULTS.BLOCKED && (
+            <View style={styles.settingsNote}>
+              <Text style={styles.settingsNoteText}>
+                Open Settings, then Apps, MedScanner, and Permissions to allow Camera access.
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -169,67 +162,74 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.LARGE,
     alignItems: 'center',
   },
-  iconContainer: {
-    marginBottom: SPACING.XLARGE,
+  card: {
+    width: '100%',
+    backgroundColor: COLORS.BG_DARKER,
+    borderWidth: 2,
+    borderColor: COLORS.CYAN,
+    borderRadius: 10,
+    padding: SPACING.LARGE,
   },
-  icon: {
-    fontSize: 80,
+  kicker: {
+    fontSize: 10,
+    fontFamily: FONTS.SHARE_TECH_MONO,
+    color: COLORS.CYAN,
+    letterSpacing: 1,
+    marginBottom: SPACING.SMALL,
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontFamily: FONTS.VT323,
     color: COLORS.CYAN,
     marginBottom: SPACING.MEDIUM,
-    textAlign: 'center',
   },
   description: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: FONTS.SHARE_TECH_MONO,
     color: COLORS.TEXT_PRIMARY,
     marginBottom: SPACING.LARGE,
-    textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 20,
   },
   statusBox: {
     width: '100%',
-    backgroundColor: COLORS.BG_DARKER,
+    backgroundColor: COLORS.BG_DARK,
     borderWidth: 2,
     borderColor: COLORS.ALERT_ORANGE,
     padding: SPACING.MEDIUM,
     marginBottom: SPACING.LARGE,
-    borderRadius: 2,
+    borderRadius: 6,
   },
   statusLabel: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: FONTS.SHARE_TECH_MONO,
     color: COLORS.TEXT_SECONDARY,
-    marginBottom: SPACING.SMALL,
+    marginBottom: 4,
   },
   statusValue: {
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: FONTS.VT323,
     fontWeight: 'bold',
   },
   warningBox: {
     width: '100%',
-    backgroundColor: COLORS.BG_DARKER,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.RED,
+    backgroundColor: COLORS.BG_DARK,
+    borderWidth: 1,
+    borderColor: COLORS.RED,
     padding: SPACING.MEDIUM,
     marginBottom: SPACING.LARGE,
-    borderRadius: 2,
+    borderRadius: 6,
   },
   warningTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: FONTS.VT323,
     color: COLORS.RED,
-    marginBottom: SPACING.SMALL,
+    marginBottom: 4,
   },
   warningText: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: FONTS.SHARE_TECH_MONO,
     color: COLORS.TEXT_PRIMARY,
-    lineHeight: 18,
+    lineHeight: 17,
   },
   button: {
     width: '100%',
@@ -238,15 +238,15 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.MEDIUM,
     borderWidth: 2,
     borderColor: COLORS.CYAN,
-    borderRadius: 2,
+    borderRadius: 6,
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 18,
     fontFamily: FONTS.VT323,
     color: COLORS.BG_DARK,
     fontWeight: 'bold',
-    letterSpacing: 1,
+    letterSpacing: 0.6,
   },
   loadingText: {
     fontSize: 16,
@@ -256,12 +256,12 @@ const styles = StyleSheet.create({
   },
   settingsNote: {
     width: '100%',
-    backgroundColor: COLORS.BG_DARKER,
-    borderWidth: 2,
+    backgroundColor: COLORS.BG_DARK,
+    borderWidth: 1,
     borderColor: COLORS.AMBER,
     padding: SPACING.MEDIUM,
     marginTop: SPACING.MEDIUM,
-    borderRadius: 2,
+    borderRadius: 6,
   },
   settingsNoteText: {
     fontSize: 11,
