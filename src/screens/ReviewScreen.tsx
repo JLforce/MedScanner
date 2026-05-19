@@ -8,7 +8,7 @@ interface ReviewScreenProps {
   onScanAnother: () => void;
 }
 
-export const ReviewScreen: React.FC<ReviewScreenProps> = ({
+const ReviewScreen: React.FC<ReviewScreenProps> = ({
   medication,
   onScanAnother,
 }) => {
@@ -63,6 +63,8 @@ export const ReviewScreen: React.FC<ReviewScreenProps> = ({
     </SafeAreaView>
   );
 };
+
+export default ReviewScreen;
 
 const styles = StyleSheet.create({
   container: {

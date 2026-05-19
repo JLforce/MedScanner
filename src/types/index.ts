@@ -4,7 +4,7 @@
  */
 
 // ============= OCR & Scanning =============
-
+import 'react-native-url-polyfill/auto';
 export interface TextDetectionResult {
   text: string;
   rawText?: string; // Alias for compatibility

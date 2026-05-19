@@ -24,7 +24,7 @@ interface ScannerScreenProps {
   onError?: (error: Error) => void;
 }
 
-export const ScannerScreen: React.FC<ScannerScreenProps> = ({
+const ScannerScreen: React.FC<ScannerScreenProps> = ({
   onMedicationDetected,
   onMedicationParsed,
   onError,
@@ -429,6 +429,8 @@ export const ScannerScreen: React.FC<ScannerScreenProps> = ({
     </SafeAreaView>
   );
 };
+
+export default ScannerScreen;
 
 const styles = StyleSheet.create({
   container: {

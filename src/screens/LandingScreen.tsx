@@ -12,11 +12,14 @@ import { COLORS, FONTS, SPACING } from '../constants';
 
 const { width } = Dimensions.get('window');
 
+
 interface LandingScreenProps {
   onStartScanning: () => void;
+  onLogin: () => void;
+  onSignup: () => void;
 }
 
-export const LandingScreen: React.FC<LandingScreenProps> = ({ onStartScanning }) => {
+const LandingScreen: React.FC<LandingScreenProps> = ({ onStartScanning, onLogin, onSignup }) => {
   // Animations
   const pulseAnim = useSharedValue(1);
   const cursorOpacity = useSharedValue(1);
@@ -126,6 +129,14 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStartScanning })
             <Text style={styles.primaryButtonText}>INITIALIZE SCAN</Text>
           </TouchableOpacity>
         </Animated.View>
+        <View style={styles.authButtonRow}>
+          <TouchableOpacity style={styles.authButton} onPress={onLogin}>
+            <Text style={styles.authButtonText}>LOGIN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.authButton} onPress={onSignup}>
+            <Text style={styles.authButtonText}>SIGNUP</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.helperText}>POSITION LABEL WITHIN TARGET RETICLE</Text>
       </View>
 
@@ -142,6 +153,8 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStartScanning })
   );
 };
 
+export default LandingScreen;
+
 const FeatureItem = ({ label, value }: { label: string; value: string }) => (
   <View style={styles.featureRow}>
     <Text style={styles.featureLabel}>{label}</Text>
@@ -155,6 +168,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.BG_DARK,
     paddingHorizontal: SPACING.LARGE,
+  },
+  authButtonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 16,
+    marginBottom: 8,
+    gap: 16,
+  },
+  authButton: {
+    backgroundColor: COLORS.CYAN,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginHorizontal: 8,
+  },
+  authButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   backdropLayer: {
     ...StyleSheet.absoluteFillObject,
@@ -288,7 +320,7 @@ const styles = StyleSheet.create({
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: SPACING.XS,
+    marginBottom: SPACING.xs,
   },
   featureLabel: {
     fontSize: 11,
@@ -303,7 +335,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     borderStyle: 'dotted',
     borderWidth: 1,
-    borderColor: COLORS.TEXT_TERTIARY,
+    borderColor: COLORS.textTertiary,
   },
   featureValue: {
     fontSize: 11,
@@ -355,7 +387,7 @@ const styles = StyleSheet.create({
   footerNote: {
     fontSize: 9,
     fontFamily: FONTS.SHARE_TECH_MONO,
-    color: COLORS.TEXT_TERTIARY,
+    color: COLORS.textTertiary,
     textAlign: 'center',
     marginBottom: 2,
   },

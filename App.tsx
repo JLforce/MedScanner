@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
-import { LandingScreen, ReviewScreen, ScannerScreen } from './src/screens';
+import { LandingScreen, ReviewScreen, ScannerScreen, LoginScreen, SignupScreen, DashboardScreen, MedicalDisclaimerScreen, OnboardingScreen } from './src/screens';
 import { TextDetectionResult, ParsedMedication } from './src/types';
 import { COLORS, FONTS } from './src/constants';
+
+
+type ScreenType = 'landing' | 'login' | 'signup' | 'dashboard' | 'scanner' | 'review' | 'medicalDisclaimer' | 'onboarding';
 
 function AppContent() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [screen, setScreen] = useState<'landing' | 'scanner' | 'review'>('landing');
+  const [screen, setScreen] = useState<ScreenType>('landing');
   const [latestParsedMedication, setLatestParsedMedication] = useState<ParsedMedication | null>(null);
 
   useEffect(() => {
@@ -69,6 +72,41 @@ function AppContent() {
     );
   }
 
+  if (screen === 'login') {
+    return <LoginScreen navigation={{
+      navigate: (target: ScreenType) => setScreen(target),
+      replace: (target: ScreenType) => setScreen(target),
+    }} onLoginSuccess={() => setScreen('medicalDisclaimer')} />;
+  }
+
+  if (screen === 'landing') {
+    return (
+      <LandingScreen
+        onStartScanning={() => setScreen('scanner')} // Optionally hide or disable if not needed
+        onLogin={() => setScreen('login')}
+        onSignup={() => setScreen('signup')}
+      />
+    );
+  }
+
+  if (screen === 'login') {
+    return <LoginScreen navigation={{
+      navigate: (target: ScreenType) => setScreen(target),
+      replace: (target: ScreenType) => setScreen(target),
+    }} onLoginSuccess={() => setScreen('medicalDisclaimer')} />;
+  }
+
+  if (screen === 'signup') {
+    return <SignupScreen navigation={{
+      navigate: (target: ScreenType) => setScreen(target),
+      replace: (target: ScreenType) => setScreen(target),
+    }} onSignupSuccess={() => setScreen('dashboard')} />;
+  }
+
+  if (screen === 'dashboard') {
+    return <DashboardScreen navigation={{ replace: (target: ScreenType) => setScreen(target), goToScan: () => setScreen('scanner') }} />;
+  }
+
   if (screen === 'review' && latestParsedMedication) {
     return (
       <ReviewScreen
@@ -81,25 +119,23 @@ function AppContent() {
     );
   }
 
-  if (screen === 'landing') {
-    return <LandingScreen onStartScanning={() => setScreen('scanner')} />;
+  if (screen === 'scanner') {
+    return (
+      <ScannerScreen
+        onMedicationDetected={handleMedicationDetected}
+        onMedicationParsed={handleMedicationParsed}
+        onError={handleScannerError}
+      />
+    );
   }
 
-  return (
-    <ScannerScreen
-      onMedicationDetected={handleMedicationDetected}
-      onMedicationParsed={handleMedicationParsed}
-      onError={handleScannerError}
-    />
-  );
-}
+  if (screen === 'medicalDisclaimer') {
+    return <MedicalDisclaimerScreen onContinue={() => setScreen('onboarding')} />;
+  }
 
-export default function App() {
-  return (
-    <ErrorBoundary>
-      <AppContent />
-    </ErrorBoundary>
-  );
+  if (screen === 'onboarding') {
+    return <OnboardingScreen onNext={() => setScreen('dashboard')} onSkip={() => setScreen('dashboard')} />;
+  }
 }
 
 const styles = StyleSheet.create({
@@ -133,3 +169,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <AppContent />
+    </ErrorBoundary>
+  );
+}
